@@ -3,47 +3,52 @@ import numpy as np
 from models.base_model import BaseModel
 
 class LogisticRegression(BaseModel):
-    def __init__(self, alpha=0, eta0=0):
+    def __init__(self, alpha=0, eta0=0, *args, **kwargs):
+        super().__init__(*args, **kwargs)
         self.model_type = 'logistic_regression'
+        self.model_architecture["layer1"]=self.dataX.shape[1]
         self.alpha = alpha
         self.eta0 = eta0
-        super().__init__()
 
-    def train(self, epochs):
-        x_train, x_test, y_train, y_test = self.__create_split(scaled=True)
-        w, b = self.__init_weights(x_train[0])
-        N = len(x_train)
-        log_loss_train = []
-        log_loss_test = []
+        # Training parameters
+        self.x_train, self.x_test, self.y_train, self.y_test = self._create_split(scaled=True)
+        self.w, self.b = self.__init_weights(self.x_train[0])
+        self.N = len(self.x_train)
 
-        for i in range(0, epochs):
-            for j in range(N):
-                grad_dw = self.__gradient_dw(x_train[j], y_train[j], w, b, self.alpha, N)
-                grad_db = self.__gradient_db(x_train[j], y_train[j], w, b)
-                w = np.array(w) + (self.eta0 * np.array(grad_dw))
-                b = b + (self.eta0 * grad_db)
+        self.log_loss_train = []
+        self.log_loss_test = []
 
-            predict_train = []
-            for m in range(len(y_train)):
-                z = np.dot(w, x_train[m]) + b
-                predict_train.append(self.__sigmoid(z))
+    def train_step(self):
+        for j in range(self.N):
+            grad_dw = self.__gradient_dw(self.x_train[j], self.y_train[j], self.w, self.b, self.alpha, self.N)
+            grad_db = self.__gradient_db(self.x_train[j], self.y_train[j], self.w, self.b)
+            self.w = np.array(self.w) + (self.eta0 * np.array(grad_dw))
+            self.b = self.b + (self.eta0 * grad_db)
 
-            train_loss = self.__logloss(y_train, predict_train)
+        predict_train = []
+        for m in range(len(self.y_train)):
+            z = np.dot(self.w, self.x_train[m]) + self.b
+            predict_train.append(self.__sigmoid(z))
 
-            predict_test = []
-            for m in range(len(y_test)):
-                z = np.dot(w, x_test[m]) + b
-                predict_test.append(self.__sigmoid(z))
+        train_loss = self.__logloss(self.y_train, predict_train)
 
-            test_loss = self.__logloss(y_test, predict_test)
+        predict_test = []
+        for m in range(len(self.y_test)):
+            z = np.dot(self.w, self.x_test[m]) + self.b
+            predict_test.append(self.__sigmoid(z))
 
-            if log_loss_train and train_loss > log_loss_train[-1]:
-                return w, b, log_loss_train, log_loss_test
+        test_loss = self.__logloss(self.y_test, predict_test)
 
-            log_loss_train.append(train_loss)
-            log_loss_test.append(test_loss)
+        if self.log_loss_train and train_loss > self.log_loss_train[-1]:
+            return self.w, self.b, self.log_loss_train, self.log_loss_test
 
-        return w, b, log_loss_train, log_loss_test
+        self.log_loss_train.append(train_loss)
+        self.log_loss_test.append(test_loss)
+
+        return self.w, self.b, self.log_loss_train, self.log_loss_test
+
+    def get_train_progress(self):
+        return self.w, self.b, self.log_loss_train, self.log_loss_test
 
     def __logloss(self, y_true, y_pred):
         y_true = np.array(y_true)

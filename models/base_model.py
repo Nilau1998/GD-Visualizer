@@ -5,14 +5,18 @@ from sklearn.preprocessing import StandardScaler
 class BaseModel:
     def __init__(self):
         self.model_type = None
+        self.model_architecture = dict()
         self.dataX = None
         self.dataY = None
         self.__create_dataset()
 
-    def train(self, epochs):
+    def train_step(self):
         pass
 
-    def __create_split(self, ratio=0.75, scaled=False):
+    def get_model_architecture(self):
+        return self.model_architecture
+
+    def _create_split(self, ratio=0.75, scaled=False):
         x_train, x_test, y_train, y_test = train_test_split(self.dataX, self.dataY, train_size=ratio, random_state=15)
 
         if scaled:

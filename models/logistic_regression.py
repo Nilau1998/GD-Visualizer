@@ -19,6 +19,7 @@ class LogisticRegression(BaseModel):
         self.log_loss_test = []
 
     def train_step(self):
+        self.current_epoch += 1
         for j in range(self.N):
             grad_dw = self.__gradient_dw(self.x_train[j], self.y_train[j], self.w, self.b, self.alpha, self.N)
             grad_db = self.__gradient_db(self.x_train[j], self.y_train[j], self.w, self.b)

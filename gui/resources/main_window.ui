@@ -60,6 +60,13 @@
        </widget>
       </item>
       <item>
+       <widget class="QLabel" name="current_epoch_label">
+        <property name="text">
+         <string>Current epoch: 0</string>
+        </property>
+       </widget>
+      </item>
+      <item>
        <spacer name="horizontalSpacer">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -93,7 +100,7 @@
        </widget>
       </item>
       <item>
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="finish_training_button">
         <property name="enabled">
          <bool>false</bool>
         </property>
@@ -181,24 +188,6 @@
      </layout>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_2">
-      <item>
-       <widget class="QLabel" name="training_progress_label">
-        <property name="text">
-         <string>Training progress on current Epoch</string>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QProgressBar" name="training_progress_bar">
-        <property name="value">
-         <number>0</number>
-        </property>
-       </widget>
-      </item>
-     </layout>
-    </item>
-    <item>
      <widget class="Line" name="line">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -206,24 +195,21 @@
      </widget>
     </item>
     <item>
-     <layout class="QHBoxLayout" name="horizontalLayout_3">
-      <item>
-       <widget class="QOpenGLWidget" name="openGLWidget">
-        <property name="enabled">
-         <bool>false</bool>
-        </property>
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-       </widget>
-      </item>
-      <item>
-       <widget class="QWidget" name="weight_visualizer_widget" native="true"/>
-      </item>
-     </layout>
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="gd_visualizer_widget">
+       <attribute name="title">
+        <string>Gradient Descent</string>
+       </attribute>
+      </widget>
+      <widget class="QWidget" name="weight_visualizer_widget">
+       <attribute name="title">
+        <string>Weights</string>
+       </attribute>
+      </widget>
+     </widget>
     </item>
    </layout>
   </widget>

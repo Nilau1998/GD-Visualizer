@@ -9,6 +9,7 @@ class BaseModel:
         self.dataX = None
         self.dataY = None
         self.__create_dataset()
+        self.current_epoch = 0
 
     def train_step(self):
         pass

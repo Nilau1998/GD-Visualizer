@@ -1,3 +1,5 @@
+from gui.gd_visualizer_logic import GDVisualizerLogic
+
 from PyQt5 import QtWidgets
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as Canvas
@@ -28,3 +30,5 @@ class GDVisualizerWidget(QtWidgets.QWidget):
         self.vbl = QtWidgets.QVBoxLayout()
         self.vbl.addWidget(self.canvas)
         self.setLayout(self.vbl)
+
+        self.logic = GDVisualizerLogic(self.canvas)

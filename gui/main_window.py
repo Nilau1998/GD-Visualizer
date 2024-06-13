@@ -32,7 +32,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.gd_visualizer_widget.layout().addWidget(self.gd_visualizer)
 
         # Logic
-        self.logic = MainWindowLogic(self, self.weight_visualizer)
+        self.logic = MainWindowLogic(self, self.weight_visualizer, self.gd_visualizer)
 
         # Signals
         self.model_selection_combobox.currentIndexChanged.connect(self.logic.handle_model_selection)

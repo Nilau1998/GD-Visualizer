@@ -4,8 +4,8 @@ from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPainter
 
 class WeightVisualizerWidget(QtWidgets.QWidget):
-    def __init__(self, *args, **kwargs):
-        super(WeightVisualizerWidget, self).__init__(*args, **kwargs)
+    def __init__(self, parent=None):
+        QtWidgets.QWidget.__init__(self, parent)
 
         self.logic = WeightVisualizerLogic(
             self.width(),

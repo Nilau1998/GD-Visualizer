@@ -5,6 +5,7 @@ import matplotlib
 
 matplotlib.use('Qt5Agg')
 
+# https://stackoverflow.com/questions/43947318/plotting-matplotlib-figure-inside-qwidget-using-qt-designer-form-and-pyqt5
 class GDVisualizerCanvas(Canvas):
     def __init__(self):
         self.fig = Figure()

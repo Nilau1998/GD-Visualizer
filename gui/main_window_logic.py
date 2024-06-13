@@ -1,8 +1,21 @@
 from models.logistic_regression import LogisticRegression
 from utils.thread_pool import ThreadPool
+from concurrent.futures import ThreadPoolExecutor
 
-from PyQt5.QtCore import QObject, pyqtSignal
+from PyQt5.QtCore import QObject, QThread, pyqtSignal
 import time
+
+class TrainingThread(QThread):
+    def __init__(self, parent=None):
+        super(TrainingThread, self).__init__(parent)
+        self.main_window_logic = parent
+
+    def run(self):
+        epochs = int(self.main_window_logic.main_window_ui.epochs_lineedit.text()) - self.main_window_logic.model_visualizer_ui.logic.model.current_epoch
+        with ThreadPoolExecutor(max_workers=1) as executor:
+            for _ in range(epochs):
+                future = executor.submit(self.main_window_logic._training_loop)
+                future.result()
 
 class MainWindowLogic(QObject):
     toggle_training_buttons_signal = pyqtSignal(bool)
@@ -22,10 +35,13 @@ class MainWindowLogic(QObject):
         self.update_weights_signal.connect(self.model_visualizer_ui.update_weights)
         self.update_current_epoch_signal.connect(self.main_window_ui.current_epoch_label.setText)
 
+        # Init
+        self.handle_model_selection()
+
     def set_model_visualizer(self, model_visualizer):
         self.model_visualizer_ui = model_visualizer
 
-    def handle_model_selection(self, index):
+    def handle_model_selection(self):
         selected_value = self.main_window_ui.model_selection_combobox.currentText()
         match selected_value:
             case "Logistic Regression":
@@ -45,10 +61,10 @@ class MainWindowLogic(QObject):
 
     def handle_finish_training_button(self):
         self.toggle_training_buttons_signal.emit(False)
-        for i in range(int(self.main_window_ui.epochs_lineedit.text()) - self.model_visualizer_ui.logic.model.current_epoch):
-            self.thread_pool.submit(self.__training_loop)
+        self.training_thread = TrainingThread(self)
+        self.training_thread.start()
 
-    def __training_loop(self):
+    def _training_loop(self):
         start_time = time.time()
         w, b, log_loss_train, log_loss_test = self.model_visualizer_ui.logic.model.train_step()
         end_time = time.time()

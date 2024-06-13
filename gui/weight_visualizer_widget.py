@@ -1,13 +1,13 @@
-from gui.model_visualizer_logic import ModelVisualizerLogic
+from gui.weight_visualizer_logic import WeightVisualizerLogic
 
 from PyQt5 import QtWidgets
 from PyQt5.QtGui import QPainter
 
-class ModelVisualizer(QtWidgets.QWidget):
+class WeightVisualizerWidget(QtWidgets.QWidget):
     def __init__(self, *args, **kwargs):
-        super(ModelVisualizer, self).__init__(*args, **kwargs)
+        super(WeightVisualizerWidget, self).__init__(*args, **kwargs)
 
-        self.logic = ModelVisualizerLogic(
+        self.logic = WeightVisualizerLogic(
             self.width(),
             self.height()
         )
@@ -27,4 +27,4 @@ class ModelVisualizer(QtWidgets.QWidget):
         self.logic.construct_model()
         self.update()
 
-        super(ModelVisualizer, self).resizeEvent(event)
+        super(WeightVisualizerWidget, self).resizeEvent(event)

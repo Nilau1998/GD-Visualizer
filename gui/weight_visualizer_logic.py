@@ -3,7 +3,7 @@ from models.logistic_regression import LogisticRegression
 from PyQt5.QtGui import QBrush, QPen, QColor, QFont
 from PyQt5.QtCore import Qt, QRect
 
-class ModelVisualizerLogic:
+class WeightVisualizerLogic:
     def __init__(self, window_width, window_height):
         self.model = None
         self.window_width = window_width
